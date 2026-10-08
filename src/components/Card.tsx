@@ -10,7 +10,7 @@ type CardProps = {
   vid: string;
   venueName: string;
   imgSrc: string;
-  onRatingChange: (rating: number) => void;
+  onRatingChange?: (rating: number) => void;
 };
 
 export default function Card({ vid, venueName, imgSrc, onRatingChange }: CardProps) {
@@ -27,21 +27,27 @@ export default function Card({ vid, venueName, imgSrc, onRatingChange }: CardPro
             fill
           />
         </div>
-        <h2 className="px-5 pt-5 text-xl font-bold">{venueName}</h2>
+        <h2
+          className={`px-5 pt-5 text-xl font-bold ${onRatingChange ? "" : "pb-5"}`}
+        >
+          {venueName}
+        </h2>
       </Link>
-      <div className="px-5 pb-5">
-        <Rating
-          id={`${venueName} Rating`}
-          name={`${venueName} Rating`}
-          data-testid={`${venueName} Rating`}
-          value={rating}
-          onChange={(_, newValue) => {
-            const nextRating = newValue ?? 0;
-            setRating(nextRating);
-            onRatingChange(nextRating);
-          }}
-        />
-      </div>
+      {onRatingChange && (
+        <div className="px-5 pb-5">
+          <Rating
+            id={`${venueName} Rating`}
+            name={`${venueName} Rating`}
+            data-testid={`${venueName} Rating`}
+            value={rating}
+            onChange={(_, newValue) => {
+              const nextRating = newValue ?? 0;
+              setRating(nextRating);
+              onRatingChange(nextRating);
+            }}
+          />
+        </div>
+      )}
     </InteractiveCard>
   );
 }
